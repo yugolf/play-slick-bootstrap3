@@ -1,0 +1,18 @@
+@(genForm: Form[GenerateForms])
+
+@import BootstrapHelper._
+
+@main("Slick Code Generator") {
+  @helper.form(action = controllers.routes.Application.generate, 'role -> "form", 'class -> "form-horizontal"){
+    <div class="container">
+      <fieldset>
+        <legend>Slick Code Generator</legend>
+        <td>@helper.inputText(genForm("slickDriver"), '_help -> "Fully qualified name of Slick driver class, e.g. “scala.slick.driver.H2Driver”")</td>
+        <td>@helper.inputText(genForm("outputFolder"), '_help -> "Place where the package folder structure should be put")</td>
+        <td>@helper.inputText(genForm("pkg"), '_help -> "Scala package the generated code should be places in")</td>
+        <td>@helper.inputText(genForm("schema"), '_help -> "Target schema")</td>
+        <div align="right"><input type="submit" value="Generate" class="btn btn-primary"></div>
+      </fieldset>
+    </div>
+  }
+}
