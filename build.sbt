@@ -4,6 +4,7 @@ version := "1.0-SNAPSHOT"
 
 libraryDependencies ++= Seq(
   jdbc,
+  "com.typesafe.slick" %% "slick" % "2.1.0-M2",
   cache
 )     
 
