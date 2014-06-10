@@ -1,0 +1,12 @@
+@()
+ <script  type="text/javascript">
+    $(function(){
+      $("#menulist").css("display","none");
+      $("#menulink").click(function () {
+        $("#menulist").slideToggle("fast");
+      });
+    });
+</script>
+<div align="right"><i id="menulink" class="glyphicon glyphicon-list"></i></div>
+<div id="menulist" align="right">
+</div>
