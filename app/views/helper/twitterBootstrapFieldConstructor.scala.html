@@ -11,7 +11,7 @@
   <label for="@elements.id" class="col-xs-3 control-label">@elements.label(elements.lang)</label>
   <div class="col-xs-9">
     <div class="form-group">
-      @Html(HtmlUtil.toFormControl(elements.input.body))
+      @Html(views.html.helper.HtmlUtil.toFormControl(elements))
       <span class="help-block">@elements.errors(elements.lang).mkString(", ")</span>
       <span class="help-block">@elements.infos(elements.lang).mkString(", ")</span>
     </div>

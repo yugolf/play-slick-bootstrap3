@@ -1,0 +1,19 @@
+@(uisampleForm: Form[UisampleForms])
+
+@import BootstrapHelper._
+
+@main("UI Sample") {
+  @helper.form(action = controllers.routes.Application.index, 'role -> "form", 'class -> "form-horizontal"){
+    <div class="container">
+      <fieldset>
+        <legend>UI Sample</legend>
+        <td>@helper.inputText(uisampleForm("textfield"), '_help -> "This field is Text.")</td>
+        <td>@helper.select(uisampleForm("selectfield"), Seq("A"  -> "Type A","B"  -> "Type B", "O"  -> "Type O", "AB" -> "Type AB"), '_help -> "This field is Select.")</td>
+        <td>@helper.inputRadioGroup(uisampleForm("radiofield"), Seq("A"  -> "Type A","B"  -> "Type B", "O"  -> "Type O", "AB" -> "Type AB"), '_help -> "This field is Radio.")</td>
+        <td>@helper.inputDate(uisampleForm("datefield"), '_help -> "This field is Date.")</td>
+        <td>@helper.inputFile(uisampleForm("filefield"), '_help -> "This field is File.")</td>
+        <td>@helper.inputPassword(uisampleForm("passwordfield"), '_help -> "This field is Password.")</td>
+      </fieldset>
+    </div>
+  }
+}
