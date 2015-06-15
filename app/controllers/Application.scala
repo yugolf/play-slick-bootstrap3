@@ -1,11 +1,11 @@
 package controllers
 
-import play.api._
 import play.api.mvc._
 import models.db.common.Generate
-import scala.slick.model.codegen.SourceCodeGenerator
+import slick.codegen.SourceCodeGenerator
 import play.api.data._
 import play.api.data.Forms._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 case class GenerateForms(slickDriver: String, outputFolder: String, pkg: String, schema: Option[String])
 case class UisampleForms(textfield: String, selectfield: String, radiofield: String, datefield: String, filefield: String, passwordfield: String)
@@ -20,7 +20,7 @@ object Application extends Controller {
       "schema"       -> optional(text(maxLength = 100)))(GenerateForms.apply)(GenerateForms.unapply))
 
   def index = Action {
-    val form = GenerateForms("scala.slick.driver.H2Driver", "app", "models.db.common", Some("PUBLIC"))
+    val form = GenerateForms("slick.driver.H2Driver", "app", "models.db.common", Some("PUBLIC"))
     Ok(views.html.generate(generateForm.fill(form)))
   }
 
@@ -30,8 +30,13 @@ object Application extends Controller {
         Ok(views.html.generate(form))
       },
       success = { form =>
-        val model = Generate.model(form.schema)
-        new SourceCodeGenerator(model).writeToFile(form.slickDriver, form.outputFolder, form.pkg)
+        val modelFuture = Generate.model(form.schema)
+        val codegenFuture = modelFuture.map(model => new SourceCodeGenerator(model) {})
+        codegenFuture.onSuccess { case codegen =>
+            codegen.writeToFile(
+                form.slickDriver,form.outputFolder,form.pkg,"Tables","Tables.scala"
+                )
+          }
         Ok(views.html.generate(generateForm.bindFromRequest))
       })
   }
