@@ -7,9 +7,9 @@ package views.html.helper {
   object HtmlUtil {
     def toFormControl(elements: FieldElements): String = {
       val inputOptions = elements.args.get('_opts)
-      val target = elements.input.body.replace("/>", inputOptions.getOrElse("") + "/>")
+      val target = elements.input.body.replaceFirst(">", inputOptions.getOrElse("") + ">")
       val beginTag = target.indexOf("<")
-      val endTag = target.indexOf("/>", beginTag + 1)
+      val endTag = target.indexOf(">", beginTag + 1)
       val targetStr = target.substring(0, endTag + 1)
       val classstr = "class=\""
 

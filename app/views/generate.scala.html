@@ -7,7 +7,13 @@
     <div class="container">
       <fieldset>
         <legend>Slick Code Generator</legend>
-        <td>@helper.inputText(genForm("slickDriver"), '_help -> "Fully qualified name of Slick driver class, e.g. “scala.slick.driver.H2Driver”")</td>
+        <td>@helper.select(genForm("slickDriver"),
+            Seq(("slick.driver.H2Driver"-> "slick.driver.H2Driver"),
+                ("slick.driver.PostgresDriver"-> "slick.driver.PostgresDriver"),
+                ("slick.driver.MySQLDriver"-> "slick.driver.MySQLDriver"),
+                ("slick.driver.HsqldbDriver"-> "slick.driver.HsqldbDriver"),
+                ("slick.driver.SQLiteDriver"-> "slick.driver.SQLiteDriver"),
+                ("slick.driver.DerbyDriver"-> "slick.driver.DerbyDriver")), '_help -> "Select Slick driver class")</td>
         <td>@helper.inputText(genForm("outputFolder"), '_help -> "Place where the package folder structure should be put")</td>
         <td>@helper.inputText(genForm("pkg"), '_help -> "Scala package the generated code should be places in")</td>
         <td>@helper.inputText(genForm("schema"), '_help -> "Target schema")</td>

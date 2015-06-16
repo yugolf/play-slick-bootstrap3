@@ -8,16 +8,17 @@ import play.api.data.Forms._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 case class GenerateForms(slickDriver: String, outputFolder: String, pkg: String, schema: Option[String])
+
 case class UisampleForms(textfield: String, selectfield: String, radiofield: String, datefield: String, filefield: String, passwordfield: String)
 
 object Application extends Controller {
 
   val generateForm = Form(
     mapping(
-      "slickDriver"  -> nonEmptyText(maxLength = 100),
+      "slickDriver" -> nonEmptyText(maxLength = 100),
       "outputFolder" -> nonEmptyText(maxLength = 100),
-      "pkg"          -> nonEmptyText(maxLength = 100),
-      "schema"       -> optional(text(maxLength = 100)))(GenerateForms.apply)(GenerateForms.unapply))
+      "pkg" -> nonEmptyText(maxLength = 100),
+      "schema" -> optional(text(maxLength = 100)))(GenerateForms.apply)(GenerateForms.unapply))
 
   def index = Action {
     val form = GenerateForms("slick.driver.H2Driver", "app", "models.db.common", Some("PUBLIC"))
@@ -30,24 +31,24 @@ object Application extends Controller {
         Ok(views.html.generate(form))
       },
       success = { form =>
-        val modelFuture = Generate.model(form.schema)
+        val modelFuture = Generate.model(form.slickDriver, form.schema)
         val codegenFuture = modelFuture.map(model => new SourceCodeGenerator(model) {})
         codegenFuture.onSuccess { case codegen =>
-            codegen.writeToFile(
-                form.slickDriver,form.outputFolder,form.pkg,"Tables","Tables.scala"
-                )
-          }
+          codegen.writeToFile(
+            form.slickDriver, form.outputFolder, form.pkg, "Tables", "Tables.scala"
+          )
+        }
         Ok(views.html.generate(generateForm.bindFromRequest))
       })
   }
 
   val uisampleForm = Form(
     mapping(
-      "textfield"     -> nonEmptyText(maxLength = 100),
-      "selectfield"   -> nonEmptyText(maxLength = 100),
-      "radiofield"    -> nonEmptyText(maxLength = 100),
-      "datefield"     -> nonEmptyText(maxLength = 100),
-      "filefield"     -> nonEmptyText(maxLength = 100),
+      "textfield" -> nonEmptyText(maxLength = 100),
+      "selectfield" -> nonEmptyText(maxLength = 100),
+      "radiofield" -> nonEmptyText(maxLength = 100),
+      "datefield" -> nonEmptyText(maxLength = 100),
+      "filefield" -> nonEmptyText(maxLength = 100),
       "passwordfield" -> nonEmptyText(maxLength = 100))(UisampleForms.apply)(UisampleForms.unapply))
 
   def uisample = Action {
