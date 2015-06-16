@@ -5,13 +5,15 @@ import models.db.common.Generate
 import slick.codegen.SourceCodeGenerator
 import play.api.data._
 import play.api.data.Forms._
+import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 case class GenerateForms(slickDriver: String, outputFolder: String, pkg: String, schema: Option[String])
 
 case class UisampleForms(textfield: String, selectfield: String, radiofield: String, datefield: String, filefield: String, passwordfield: String)
 
-object Application extends Controller {
+class Application extends Controller {
 
   val generateForm = Form(
     mapping(
@@ -37,6 +39,9 @@ object Application extends Controller {
           codegen.writeToFile(
             form.slickDriver, form.outputFolder, form.pkg, "Tables", "Tables.scala"
           )
+        }
+        codegenFuture.onFailure{ case f =>
+            //
         }
         Ok(views.html.generate(generateForm.bindFromRequest))
       })
